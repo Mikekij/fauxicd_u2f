@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}FauxICD{% endblock %}
+
+{% block body_block %}
+
+<div class="row-fluid">
+  <div class="col-md-12">
+    <table class="table table-striped">
+      <tr>
+          <th>Name</th>
+          <th>Zap Duration</th>
+          <th>Keys Required</th>
+      </tr>
+
+      {% if icd_list %}
+        {% for this_icd in icd_list %}
+        <tr>
+          <td>{{ this_icd.name }}</td>
+          <td>{{ this_icd.zap_duration }}</td>
+          <td>{{ this_icd.keys_required }}</td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+
+    </table>
+
+
+  </div><!-- /.col-md-12 -->
+
+</div>
+<!--/row-->
+{% endblock %}

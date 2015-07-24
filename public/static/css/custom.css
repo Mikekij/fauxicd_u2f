@@ -1,0 +1,24 @@
+.errorlist {
+  color:#C92F30;
+}
+
+.navbar-default {
+  border-color: #E7E7E7;
+  background-color: #4FA8C7;
+}
+
+/* title */
+.navbar .brand {
+    color: #FDFDFD;
+    text-shadow: none;
+}
+
+.navbar .nav>li>a {
+  color: #FDFDFD;
+  text-shadow: none;
+}
+
+.navbar-text {
+  color: #FDFDFD;
+  text-shadow: none;
+}

@@ -1,0 +1,25 @@
+<div class="navbar navbar-default navbar-fixed-top">
+   <div class="container">
+       <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+       </button>
+       <a class="brand" href="/ui">FauxICD</a>
+
+       <div class="nav-collapse collapse">
+           <ul class="nav pull-right"> <!-- right nav -->
+                <li class="navbar-text">Log In</li>
+                <li class="navbar-text">Register</li>
+
+           </ul>
+           <ul class="nav"> <!-- left nav -->
+               <li><a href="#">Available ICDs</a></li>
+               <a href="{% url 'icd_index' %}">Available ICDs</a>
+               <li><a href="#">Available ICDs</a></li>
+
+           </ul>
+       </div>
+       <!--/.nav-collapse -->
+   </div>
+</div>
