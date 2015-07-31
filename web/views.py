@@ -5,6 +5,8 @@ from web.models import *
 from web.forms import IcdForm
 #from hardware_contol.app import * #not sure how to effectively import these functions.
 
+
+#app homepage
 def index(request):
     icd_list = Icd.objects.all() #set the list of ICDs. Should return only one for demo
     context_dict = {'icd_list': icd_list}
@@ -17,6 +19,21 @@ def icd_index(request):
     context_dict = {'icd_list': icd_list}
 
     return render(request, 'web/icd_index.html',context_dict)
+
+
+#icd views
+def show_icd(request, id=None):
+    #is this a get?
+    if request.method == 'GET':
+        if id:
+            icd = Icd.objects.get(id=id)
+        else:
+            icd = None
+    else:
+        return redirect('icd_index')
+
+    context_dict = {'icd': icd}
+    return render(request, 'web/icd.html', context_dict)
 
 def add_icd(request):
     #is this a post?

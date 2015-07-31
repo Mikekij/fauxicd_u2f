@@ -34,3 +34,7 @@
   text-align:center;
   padding-bottom: 25px;
 }
+
+.icd-list {
+  list-style-type: none;
+}

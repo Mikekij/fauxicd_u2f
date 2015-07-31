@@ -5,16 +5,17 @@
 {% block body_block %}
 <div class=row>
   <div class="col-md-12 header-div">
-    <h1>Welcome to Medcrypt's FauxICD Interface</h1>
+    <h1>Medcrypt FauxICD Interface</h1>
   </div>
 </div><!-- /.row -->
 
 <div class="row">
   <div class="col-md-6">
     <div class="icd-list-container">
-      <ul>
+      <h3>ICDs</h3>
+      <ul class="icd-list">
         {% for icd in icd_list %}
-          <li>{{ icd.name }}</li>
+          <li>- {{ icd.name }}</li>
         {% endfor %}
       </ul>
     </div><!-- /.icd-list-container -->

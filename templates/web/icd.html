@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}FauxICD{% endblock %}
+
+{% block body_block %}
+
+<div class="row">
+  <div class="col-md-6">
+
+    {% if icd %}
+      Name: {{ icd.name }}<br />
+      Zap Duration: {{ icd.duration }}<br />
+      Keys Required: {{ icd.keys_required }}<br />
+    {% endif %}
+
+    <div><a href="{% url 'icd_index' %}" >List All ICDs</a></div>
+  </div><!-- /.col-md-6 -->
+
+</div><!--/row-->
+{% endblock %}

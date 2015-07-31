@@ -17,7 +17,7 @@
       {% if icd_list %}
         {% for this_icd in icd_list %}
         <tr>
-          <td>{{ this_icd.name }}</td>
+          <td><a href="{% url 'show_icd' id=this_icd.id %}">{{ this_icd.name }}</a></td>
           <td>{{ this_icd.zap_duration }}</td>
           <td>{{ this_icd.keys_required }}</td>
           <td><a href="{% url 'edit_icd' id=this_icd.id %}">edit</a></td>
