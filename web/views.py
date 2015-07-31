@@ -38,13 +38,14 @@ def add_icd(request):
 
     return render(request, 'web/add_icd.html', {'form': form})
 
-def edit_icd(request, id=None, template_name='web/add_icd.html'):
+def edit_icd(request, id=None, template_name='web/edit_icd.html'):
+
     #do we have an id?
     if id:
-        icd =
+        this_icd = Icd.objects.get(id=id)
         #is this a post?
         if request.method == 'POST':
-            form = IcdForm(request.POST)
+            form = IcdForm(request.POST, instance=this_icd)
 
             #is it valid?
             if form.is_valid():
@@ -57,12 +58,13 @@ def edit_icd(request, id=None, template_name='web/add_icd.html'):
                 print form.errors
         else: #if this is a GET
             #render the form
-            form = IcdForm()
+            form = IcdForm(instance=this_icd)
 
     else:   #no id in request
         return redirect('icd_index')
 
-    return render(request, 'web/add_icd.html', {'form': form})
+    context_dict = {'form': form, 'this_icd': this_icd}
+    return render(request, 'web/edit_icd.html', context_dict)
 
 def deliver_shock(request):
     context_dict = {}

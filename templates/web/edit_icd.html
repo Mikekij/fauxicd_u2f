@@ -6,7 +6,7 @@
 
 <h1>Add an ICD</h1>
 
-<form id="icd_form" method="post" action="/web/add_icd/">
+<form id="icd_form" method="post" action="/web/edit_icd/{{ this_icd.id }}/">
     {% csrf_token %}
     {% for hidden in form.hidden_fields %}
         {{ hidden }}
