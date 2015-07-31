@@ -1,0 +1,6 @@
+- Need a model for all ICDs that can be connected to (Icd)
+- Need an index view for all ICDs (icd_index)
+- Need a form page to add, edit ICDs
+- Need a separate app (?) to handle RPi / zapper logic.
+- Need to add (standard) user auth
+- 

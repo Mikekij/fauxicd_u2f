@@ -3,14 +3,27 @@
 {% block title %}MedCrypt{% endblock %}
 
 {% block body_block %}
+<div class=row>
+  <div class="col-md-12 header-div">
+    <h1>Welcome to Medcrypt's FauxICD Interface</h1>
+  </div>
+</div><!-- /.row -->
 
-<div class="hero-unit">
-  {{ text }}
-</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="icd-list-container">
+      <ul>
+        {% for icd in icd_list %}
+          <li>{{ icd.name }}</li>
+        {% endfor %}
+      </ul>
+    </div><!-- /.icd-list-container -->
+  </div><!-- /.col-md-6 -->
+  <div class="col-md-6">
+    <div class="jumbotron">
+      <h2>Deliver a Treatment</h2>
+    </div>
+  </div><!-- /.col-md-6 -->
+</div><!-- /.row -->
 
-<div class="row-fluid">
-
-
-</div>
-<!--/row-->
 {% endblock %}

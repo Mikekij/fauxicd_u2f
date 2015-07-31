@@ -5,10 +5,12 @@
 .navbar-default {
   border-color: #E7E7E7;
   background-color: #4FA8C7;
+  color: #FDFDFD;
+
 }
 
 /* title */
-.navbar .brand {
+.navbar-brand {
     color: #FDFDFD;
     text-shadow: none;
 }
@@ -21,4 +23,14 @@
 .navbar-text {
   color: #FDFDFD;
   text-shadow: none;
+  padding-left:10px;
+}
+
+.body-container {
+  padding-top:60px;
+}
+
+.header-div {
+  text-align:center;
+  padding-bottom: 25px;
 }

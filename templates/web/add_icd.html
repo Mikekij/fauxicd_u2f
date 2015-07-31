@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}FauxICD{% endblock %}
+
+{% block body_block %}
+
+<h1>Add an ICD</h1>
+
+<form id="icd_form" method="post" action="/web/add_icd/">
+
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in form.visible_fields %}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field }} <br />
+    {% endfor %}
+
+    <input type="submit" name="submit" value="Create ICD" />
+</form>
+
+
+{% endblock %}

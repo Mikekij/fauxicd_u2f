@@ -4,13 +4,14 @@
 
 {% block body_block %}
 
-<div class="row-fluid">
+<div class="row">
   <div class="col-md-12">
     <table class="table table-striped">
       <tr>
           <th>Name</th>
           <th>Zap Duration</th>
           <th>Keys Required</th>
+          <th></th>
       </tr>
 
       {% if icd_list %}
@@ -19,13 +20,14 @@
           <td>{{ this_icd.name }}</td>
           <td>{{ this_icd.zap_duration }}</td>
           <td>{{ this_icd.keys_required }}</td>
+          <td><a href="#">edit</td>
         </tr>
         {% endfor %}
       {% endif %}
 
     </table>
 
-
+  <div><a href="{% url 'add_icd' %}" >Add ICD</a></div>
   </div><!-- /.col-md-12 -->
 
 </div>
