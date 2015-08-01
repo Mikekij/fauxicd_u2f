@@ -7,5 +7,6 @@ urlpatterns = patterns('',
         url(r'^icd/(?P<id>\d+)/$', views.show_icd, name='show_icd'),
         url(r'^add_icd/$', views.add_icd, name="add_icd"),
         url(r'^edit_icd/(?P<id>\d+)/$', views.edit_icd, name='edit_icd'),
-        url(r'^deliver_shock/$', views.deliver_shock, name="deliver_shock"),
+        url(r'^deliver_shock_page/$', views.deliver_shock_page, name="deliver_shock_page"),
+        url(r'^deliver_shock_ajax/$', views.deliver_shock_ajax, name="deliver_shock_ajax"),
         )

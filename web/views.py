@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
+from json import dumps, loads
 from web.models import *
 from web.forms import IcdForm
 #from hardware_contol.app import * #not sure how to effectively import these functions.
@@ -83,7 +84,13 @@ def edit_icd(request, id=None, template_name='web/edit_icd.html'):
     context_dict = {'form': form, 'this_icd': this_icd}
     return render(request, 'web/edit_icd.html', context_dict)
 
-def deliver_shock(request):
+def deliver_shock_page(request):
     context_dict = {}
 
-    return render(request, 'web/deliver_shock.html',context_dict)
+    return render(request, 'web/deliver_shock_page.html',context_dict)
+
+def deliver_shock_ajax(request):
+    message = "Shock Handler goes Here"
+    context_dict = {'message': message}
+
+    return HttpResponse(dumps(context_dict))

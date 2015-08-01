@@ -4,17 +4,32 @@
 
 {% block body_block %}
 
-<div class="row">
-  <div class="col-md-6">
+  <div class="row">
+    <div class="col-md-6">
 
-    {% if icd %}
-      Name: {{ icd.name }}<br />
-      Zap Duration: {{ icd.duration }}<br />
-      Keys Required: {{ icd.keys_required }}<br />
-    {% endif %}
+      {% if icd %}
+        <b>Name:</b> {{ icd.name }}<br />
+        <b>Zap Duration:</b> {{ icd.zap_duration }} ms<br />
+        <b>Encryption Keys Required:</b> {{ icd.keys_required }}<br />
+      {% endif %}
 
-    <div><a href="{% url 'icd_index' %}" >List All ICDs</a></div>
-  </div><!-- /.col-md-6 -->
+      <div><a href="{% url 'icd_index' %}" >List All ICDs</a></div>
+    </div><!-- /.col-md-6 -->
 
-</div><!--/row-->
+    <div class="col-md-6">
+      <div class="jumbotron">
+        <div class="btn btn-danger" id="shock-button">Deliver Shock</div>
+      </div><!-- /.jumbotron -->
+    </div><!-- /.col-md-6 -->
+  </div><!--/row-->
+
+  <script>
+  $("#shock-button").click(function(){
+    $.get("{% url 'deliver_shock_ajax' %}", function(data){
+      results = JSON.parse(data);
+      alert(results.message);
+    });
+  });
+  </script>
+
 {% endblock %}

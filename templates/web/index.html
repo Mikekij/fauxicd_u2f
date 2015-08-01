@@ -15,7 +15,7 @@
       <h3>ICDs</h3>
       <ul class="icd-list">
         {% for icd in icd_list %}
-          <li>- {{ icd.name }}</li>
+          <li>- <a href="{% url 'show_icd' id=icd.id %}">{{ icd.name }}</a></li>
         {% endfor %}
       </ul>
     </div><!-- /.icd-list-container -->
