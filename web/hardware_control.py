@@ -1,7 +1,5 @@
 
-def test_handler(id):
-    message = "Test handler for dev environment"
-    return message
+
 
 try:
     import RPi.GPIO as GPIO ## Import GPIO library
@@ -84,3 +82,9 @@ try:
         rpi = True
 except ImportError:
     rpi = False
+
+def test_handler(id):
+    message = "Test handler for dev environment"
+    config()
+    fire_the_spark(0.5)
+    return message
