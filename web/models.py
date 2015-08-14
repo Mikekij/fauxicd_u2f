@@ -1,6 +1,5 @@
 from django.db import models
-
-# Create your models here.
+from django.contrib.auth.models import User
 
 class Icd(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -12,3 +11,16 @@ class Icd(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return "/icd/%i" % self.id
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+
+    icd_id = models.IntegerField(blank=True)
+
+    def __unicode__(self):
+        return self.user.username

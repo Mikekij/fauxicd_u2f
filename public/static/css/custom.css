@@ -1,3 +1,8 @@
+body {
+  background-color: #F4FDFD;
+}
+
+
 .errorlist {
   color:#C92F30;
 }
@@ -50,4 +55,16 @@
   horizontal-align:middle;
   margin-left:auto;
   margin-right:auto;
+}
+
+.icd_square_div {
+  width:200px;
+  height:200px;
+  border: 2px solid;
+  border-radius: 25px;
+  border-color: #E4EFEF;
+  background-color: #E4EFEF;
+  float:left;
+  margin:5px;
+  padding:10px;
 }

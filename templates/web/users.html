@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}MedCrypt - FauxICD | Users{% endblock %}
+
+{% block body_block %}
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped">
+      <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th></th>
+      </tr>
+
+      {% if user_list %}
+        {% for user in user_list %}
+        <tr>
+          <td><a href="{% url 'show_user' id=user.id %}">{{ user.username }}</a></td>
+          <td>{{ user.email }}</td>
+          <td><a href="{% url 'edit_user' id=user.id %}">edit</a></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+
+    </table>
+  </div><!-- /.col-md-12 -->
+
+</div>
+<!--/row-->
+{% endblock %}

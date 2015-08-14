@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}MedCrypt - FauxICD | {{ user.username }}{% endblock %}
+
+{% block body_block %}
+
+  <div class="row">
+    <div class="col-md-12">
+
+      {% if user %}
+        <b>User Name:</b> {{ user.username }}<br />
+
+      {% endif %}
+
+      <div><a href="{% url 'users' %}" >List All Users</a></div>
+    </div><!-- /.col-md-12 -->
+
+{% endblock %}
