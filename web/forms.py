@@ -23,5 +23,4 @@ class IcdForm(forms.ModelForm):
 
     class Meta:
         model = Icd
-
-        #fields = ('name', 'zap_duration', 'keys_required',)
+        fields = ('name', 'zap_duration', 'keys_required',)
