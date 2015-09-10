@@ -4,6 +4,9 @@
 
 {% block body_block %}
 
+
+
+
   <div class="row">
     <div class="col-md-6">
 
@@ -13,7 +16,10 @@
         <b>Encryption Keys Required:</b> {{ icd.keys_required }}<br />
       {% endif %}
 
-      <div><a href="{% url 'edit_icd' id=icd.id %}" >Edit</a> | <a href="{% url 'icd_index' %}" >List All ICDs</a></div>
+      <div>
+        <a href="{% url 'edit_icd' id=icd.id %}" >Edit</a> | <a href="{% url 'icd_index' %}" >List All ICDs</a> |
+        <a href="#" id="check_perms">Check Permissions</a>
+      </div>
     </div><!-- /.col-md-6 -->
 
     <div class="col-md-6">
@@ -30,6 +36,16 @@
       alert(results.message);
     });
   });
+
+  $( "#check_perms" ).click(function() {
+    url = "http://localhost:3000/permissions_check?format=json";
+    user_id = "&user_id=1";
+    mcaction_id = "&mcaction_id=5"
+    $.getJSON(url + user_id + mcaction_id,function(data) {
+      alert("User has permission:" + data);
+    });
+  });
+
   </script>
 
 {% endblock %}
