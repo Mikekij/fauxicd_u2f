@@ -73,7 +73,7 @@ def user_login(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return HttpResponseRedirect('/web/')
+                return HttpResponseRedirect('/web/tfa_stub')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your account is disabled.")
@@ -89,7 +89,11 @@ def user_login(request):
         # blank dictionary object...
         return render(request, 'web/login.html', {})
 
+def tfa_stub(request):
 
+    context_dict = {}
+
+    return render(request, 'web/tfa_stub.html',context_dict)
 
 @login_required
 def user_logout(request):

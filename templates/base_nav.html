@@ -19,10 +19,10 @@
 
     <ul class="nav navbar-nav pull-right">
       {% if user.is_authenticated %}
-        <li>Authenticated</li>
+        <li><a href="{% url 'show_user' id=user.id %}">Profile</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
+
       {% else %}
-        <li>Not Authenticated</li>
         <li><a href="{% url 'login' %}">Login</a></li>
         <li><a href="{% url 'register' %}">Register</a></li>
       {% endif %}
