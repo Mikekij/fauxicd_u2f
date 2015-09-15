@@ -24,3 +24,14 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+class TfaRegistration(models.Model):
+    user_id = models.IntegerField()
+    key_handle = models.CharField(max_length=128)
+    public_key = models.TextField()
+    certificate = models.TextField()
+    counter = models.IntegerField(default=0)
+    last_authenticated_at = models.DateTimeField()
+
+    def __unicode__(self):      #For Python 2, use __str__ on Python 3
+        return self.public_key

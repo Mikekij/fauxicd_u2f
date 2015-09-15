@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
+from u2flib_server.jsapi import DeviceRegistration
+from u2flib_server.u2f import (start_register, complete_register,
+                               start_authenticate, verify_authenticate)
 
 
 #app homepage
@@ -73,7 +76,7 @@ def user_login(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return HttpResponseRedirect('/web/tfa_stub')
+                return HttpResponseRedirect('/web/new_tfa_registration')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your account is disabled.")
@@ -89,11 +92,41 @@ def user_login(request):
         # blank dictionary object...
         return render(request, 'web/login.html', {})
 
-def tfa_stub(request):
+def new_tfa_registration(request):
+
+    #tfa_registration = TfaRegistration()
+
+    #u2f ||= U2F::U2F.new(request.base_url)
+
+    #registration_requests = @u2f.registration_requests
+
+    # Store challenges. We need them for the verification step
+    #session[:challenges] = @registration_requests.map(&:challenge)
+
+    # Fetch existing Registrations from your db and generate SignRequests
+    #key_handles = TfaRegistration.all.map(&:key_handle)
+    #sign_requests = u2f.authentication_requests(key_handles)
+
 
     context_dict = {}
 
-    return render(request, 'web/tfa_stub.html',context_dict)
+    #registration_requests =
+
+    return render(request, 'web/new_tfa_registration.html',context_dict)
+
+
+def create_tfa_registration(request):
+
+
+
+
+    context_dict = {}
+
+    return render(request, 'web/create_tfa_registration.html',context_dict)
+
+
+
+
 
 @login_required
 def user_logout(request):

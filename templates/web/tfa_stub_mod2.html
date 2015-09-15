@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}MedCrypt - FauxICD | Login{% endblock %}
+
+{% block body_block %}
+
+
+<div class=row>
+  <div class="col-12-md">
+    <p>Touch your U2F token. or click <a href="{% url 'index' %}">HERE</a></p>
+        <form method="POST" action="finishRegistration" id="form" onsubmit="return false;">
+            <input type="hidden" name="username" value="${username}"/>
+            <input type="hidden" name="tokenResponse" id="tokenResponse"/>
+        </form>
+  </div><!-- /.col-12-md -->
+</div><!-- /.row -->
+
+
+
+{% endblock %}
