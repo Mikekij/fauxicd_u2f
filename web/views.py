@@ -1,18 +1,16 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.template import RequestContext
 from json import dumps, loads
 from web.models import *
-from web.forms import IcdForm,UserForm,UserProfileForm
+from web.forms import IcdForm,UserForm,UserProfileForm, NewTfaRegistrationForm
 from web.hardware_control import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+import os
 
-from u2flib_server.jsapi import DeviceRegistration
-from u2flib_server.u2f import (start_register, complete_register,
-                               start_authenticate, verify_authenticate)
-
+from u2flib_server import u2f_v2 as u2f
 
 #app homepage
 def index(request):
@@ -107,8 +105,14 @@ def new_tfa_registration(request):
     #key_handles = TfaRegistration.all.map(&:key_handle)
     #sign_requests = u2f.authentication_requests(key_handles)
 
+    APP_ID = 'https://dev.medcrypt.com:8000'
+    #APP_ID = 'https://' + request.get_host()
 
-    context_dict = {}
+    registrationRequest = u2f.start_register(APP_ID)
+
+    new_tfa_registration_form = NewTfaRegistrationForm(request.POST)
+
+    context_dict = {'app_id': APP_ID, 'registrationRequest': registrationRequest, 'new_tfa_registration_form': new_tfa_registration_form}
 
     #registration_requests =
 
@@ -117,10 +121,18 @@ def new_tfa_registration(request):
 
 def create_tfa_registration(request):
 
+    response = request.POST["response"]
+    original_request = request.POST["original_request"]
+
+    print "Request data: " + original_request
+    print "Response data: " + response
+
+    result = u2f.complete_register(original_request, response)
 
 
 
-    context_dict = {}
+    context_dict = {'result': result, 'response': response}
+
 
     return render(request, 'web/create_tfa_registration.html',context_dict)
 

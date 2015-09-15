@@ -33,6 +33,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#APPEND_SLASH = False
 
 #static
 STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')

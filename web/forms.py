@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from web.models import Icd, UserProfile
+from web.models import Icd, UserProfile, TfaRegistration
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -15,6 +15,10 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('icd_id',)
 
+class NewTfaRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = TfaRegistration
+        fields = ()
 
 class IcdForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="ICD Name:")
