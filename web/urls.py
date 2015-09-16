@@ -17,4 +17,5 @@ urlpatterns = patterns('',
         url(r'^edit_icd/(?P<id>\d+)/$', views.edit_icd, name='edit_icd'),
         url(r'^deliver_shock_page/$', views.deliver_shock_page, name="deliver_shock_page"),
         url(r'^deliver_shock_ajax/$', views.deliver_shock_ajax, name="deliver_shock_ajax"),
+        url(r'^test_api_call/$', views.test_api_call, name="test_api_call")
         )
