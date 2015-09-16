@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import os
-from rest_framework import viewsets
 
 from u2flib_server import u2f_v2 as u2f
 
