@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from django_u2f import *
 
 urlpatterns = patterns('',
     # Examples:
