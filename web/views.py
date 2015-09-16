@@ -3,11 +3,12 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.template import RequestContext
 from json import dumps, loads
 from web.models import *
-from web.forms import IcdForm,UserForm,UserProfileForm, NewTfaRegistrationForm
+from web.forms import IcdForm,UserForm,UserProfileForm, NewTfaRegistrationForm, NewTfaAuthenticationForm
 from web.hardware_control import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from datetime import datetime
 import os
 
 from u2flib_server import u2f_v2 as u2f
@@ -90,6 +91,8 @@ def user_login(request):
         # blank dictionary object...
         return render(request, 'web/login.html', {})
 
+
+### U2F Registration
 def new_tfa_registration(request):
 
     #tfa_registration = TfaRegistration()
@@ -120,7 +123,7 @@ def new_tfa_registration(request):
 
 
 def create_tfa_registration(request):
-
+    current_user = request.user
     response = request.POST["response"]
     original_request = request.POST["original_request"]
 
@@ -128,14 +131,85 @@ def create_tfa_registration(request):
     print "Response data: " + response
 
     result = u2f.complete_register(original_request, response)
+    print "result: " + str(result[0])
+
+    if result:
+        #pass
+        tfa_registration = TfaRegistration(key_handle = result[0]['keyHandle'], public_key = result[0]['publicKey'], user_id = current_user.id, last_authenticated_at = datetime.now())
+        tfa_registration.save()
+
+        print "pass path"
+        context_dict = {'result': str(result[0]), 'response': response}
+        return render(request, 'web/create_tfa_registration.html',context_dict)
+    else:
+        #fail
+        context_dict = {'result': str(result[0]), 'response': response}
+        return render(request, 'web/create_tfa_registration.html',context_dict)
+
+###authentication_requests
+def new_tfa_authentication(request):
+    current_user = request.user
+
+    #tfa_registration = TfaRegistration()
+
+    #u2f ||= U2F::U2F.new(request.base_url)
+
+    #registration_requests = @u2f.registration_requests
+
+    # Store challenges. We need them for the verification step
+    #session[:challenges] = @registration_requests.map(&:challenge)
+
+    # Fetch existing Registrations from your db and generate SignRequests
+    #key_handles = TfaRegistration.all.map(&:key_handle)
+    #sign_requests = u2f.authentication_requests(key_handles)
+
+    APP_ID = 'https://dev.medcrypt.com:8000'
+
+    #APP_ID = 'https://' + request.get_host()
+    tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
+    start_data = {}
+    start_data['keyHandle'] = str(tfa_registration.key_handle)
+    start_data['appId'] = APP_ID
+
+    sign_request = u2f.start_authenticate(start_data)
+
+    new_tfa_authentication_form = NewTfaAuthenticationForm(request.POST)
+
+    context_dict = {'sign_request': sign_request, 'new_tfa_authentication_form': new_tfa_authentication_form}
+
+    return render(request, 'web/new_tfa_authentication.html',context_dict)
 
 
+def create_tfa_authentication(request):
+    current_user = request.user
+    response = request.POST["response"]
+    original_request = request.POST["original_request"]
 
-    context_dict = {'result': result, 'response': response}
+    print "Request data: " + original_request
+    print "Response data: " + response
+
+    APP_ID = 'https://dev.medcrypt.com:8000'
+
+    #APP_ID = 'https://' + request.get_host()
+    tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
+    start_data = {}
+    start_data['keyHandle'] = str(tfa_registration.key_handle)
+    start_data['appId'] = APP_ID
+    start_data['publicKey'] = str(tfa_registration.public_key)
 
 
-    return render(request, 'web/create_tfa_registration.html',context_dict)
+    result = u2f.verify_authenticate(start_data, original_request, response)
+    print "result: " + str(result[0])
 
+    if result:
+        print "pass path"
+        context_dict = {'result': str(result), 'response': response}
+        return render(request, 'web/create_tfa_registration.html',context_dict)
+    else:
+        #fail
+        print "fail path"
+        context_dict = {'result': str(result), 'response': response}
+        return render(request, 'web/create_tfa_registration.html',context_dict)
 
 
 
