@@ -5,13 +5,18 @@ from json import dumps, loads
 from web.models import *
 from web.forms import IcdForm,UserForm,UserProfileForm, NewTfaRegistrationForm, NewTfaAuthenticationForm
 from web.hardware_control import *
+from web.mcnode_api import *
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from datetime import datetime
 import os
+import requests
 
 from u2flib_server import u2f_v2 as u2f
+
+
 
 #app homepage
 def index(request):
@@ -138,6 +143,7 @@ def create_tfa_registration(request):
         tfa_registration = TfaRegistration(key_handle = result[0]['keyHandle'], public_key = result[0]['publicKey'], user_id = current_user.id, last_authenticated_at = datetime.now())
         tfa_registration.save()
 
+
         print "pass path"
         context_dict = {'result': str(result[0]), 'response': response}
         return render(request, 'web/create_tfa_registration.html',context_dict)
@@ -203,13 +209,16 @@ def create_tfa_authentication(request):
 
     if result:
         print "pass path"
+        r = post_login_message(current_user.email) #post this to MCNode
+        print "Logged to Medcrypt: " + str(r.content)
         context_dict = {'result': str(result), 'response': response}
-        return render(request, 'web/create_tfa_registration.html',context_dict)
+        return HttpResponseRedirect("/")
+        #return render(request, 'web/create_tfa_registration.html',context_dict)
     else:
         #fail
         print "fail path"
         context_dict = {'result': str(result), 'response': response}
-        return render(request, 'web/create_tfa_registration.html',context_dict)
+        return render(request, 'web/create_tfa_authentication.html',context_dict)
 
 
 
@@ -240,6 +249,7 @@ def show_user(request, id=None):
         return redirect('users')
 
     context_dict = {'user': user}
+
     return render(request, 'web/show_user.html', context_dict)
 
 def edit_user(request, id=None, template_name='web/edit_user.html'):
@@ -284,6 +294,8 @@ def icd_index(request):
 
 def show_icd(request, id=None):
     #is this a get?
+    current_user = request.user
+
     if request.method == 'GET':
         if id:
             icd = Icd.objects.get(id=id)
@@ -292,8 +304,17 @@ def show_icd(request, id=None):
     else:
         return redirect('icd_index')
 
+
     context_dict = {'icd': icd}
-    return render(request, 'web/icd.html', context_dict)
+
+    #check permissions
+    if permissions_check(current_user.email, "8") == True: #8 is action code in MCNode
+        return render(request, 'web/icd.html', context_dict)
+    else:
+        print "Insufficient Permissions for this action."
+        return redirect('index')
+
+
 
 def add_icd(request):
     #is this a post?
@@ -316,6 +337,7 @@ def add_icd(request):
     return render(request, 'web/add_icd.html', {'form': form})
 
 def edit_icd(request, id=None, template_name='web/edit_icd.html'):
+    current_user = request.user
 
     #do we have an id?
     if id:
@@ -337,11 +359,21 @@ def edit_icd(request, id=None, template_name='web/edit_icd.html'):
             #render the form
             form = IcdForm(instance=this_icd)
 
+            #check permissions
+            if permissions_check(current_user.email, "4") == True: #4 is action code in MCNode
+                context_dict = {'form': form, 'this_icd': this_icd}
+                return render(request, 'web/edit_icd.html', context_dict)
+            else:
+                print "Insufficient Permissions for this action."
+                messages.add_message(request, messages.WARNING, 'Insufficient Permissions for this action.')
+                return redirect('show_icd', id=id)
+
     else:   #no id in request
         return redirect('icd_index')
 
-    context_dict = {'form': form, 'this_icd': this_icd}
-    return render(request, 'web/edit_icd.html', context_dict)
+
+
+
 
 def deliver_shock_page(request):
     context_dict = {}

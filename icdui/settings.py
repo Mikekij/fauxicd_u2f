@@ -65,11 +65,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'web',
     'django_extensions',
+    'corsheaders',
 #    'hardware_contol', #this isn't working.
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,3 +121,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#corsheaders
+CORS_ORIGIN_WHITELIST = (
+        'google.com',
+        'https://dev.medcrypt.com:3000',
+        'https://localhost:8000'
+    )

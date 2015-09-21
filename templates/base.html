@@ -25,6 +25,13 @@
 
       <!-- body here -->
       <div class="container body-container">
+      {% if messages %}
+          <div class=row>
+          {% for message in messages %}
+          <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+          {% endfor %}
+          </div>
+      {% endif %}
       {% block body_block %}
 
       {% endblock %}

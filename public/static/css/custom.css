@@ -68,3 +68,10 @@ body {
   margin:5px;
   padding:10px;
 }
+
+.warning {
+  background-color:#FFA4A4;
+  padding:10px;
+  float:left;
+  margin:10px;
+}
