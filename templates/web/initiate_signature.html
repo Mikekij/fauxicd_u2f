@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}MedCrypt - FauxICD | Login{% endblock %}
+
+{% block body_block %}
+
+<script>
+//make challenge register request
+
+//when the page is loaded, I need to have made a request to the U2F server to get the chanllenge code.
+//The result of this request should look like this:
+//{"authenticateRequests":[],"registerRequests":[{"challenge":"GEKC8Yvtpen6mTs4beBvC2N0RhZaJw5GTZbXIxTI9rs","appId":"https://localhost:8443","version":"U2F_V2"}]};
+//this ajax request is failing with:
+//https://localhost:8001/enroll?callback=jQuery2140391487275948748_1441912662048&_=1441912662049 net::ERR_CONNECTION_REFUSED
+//I'm also getting a "U2F failed with error: 2" error, meaning the app_id is wrong.
+// I'm not sure how this relates: https://developers.yubico.com/U2F/App_ID.html
+
+$(document).ready(function(){
+  $('#myModal').modal('show')
+});
+
+var signRequests = {{ sign_request|safe }};
+
+window.u2f.sign([signRequests], function(signResponse) {
+  var form, reg;
+  if (signResponse.errorCode) {
+    return alert("Authentication error: " + signResponse.errorCode);
+  }
+  form = document.forms[0];
+  response = document.querySelector('[name=response]');
+  response.value = JSON.stringify(signResponse);
+  original_request = document.querySelector('[name=original_request]');
+  original_request.value = JSON.stringify(signRequests);
+
+  form.submit();
+}, 15);
+
+
+</script>
+
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <h3>This action requires a digital signature.</br>
+          Please insert a U2F device (such as a Yubikey) and press the flashing button.</h3>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<form method="POST" action="/create_signature/" id="form" >
+  {% csrf_token %}
+    <input type="hidden" name="response">
+    <input type="hidden" name="original_request">
+
+</form>
+
+
+
+
+{% endblock %}

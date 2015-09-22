@@ -344,6 +344,8 @@ def edit_icd(request, id=None, template_name='web/edit_icd.html'):
         this_icd = Icd.objects.get(id=id)
         #is this a post?
         if request.method == 'POST':
+            #ADD PERMISSIONS CHECK TO THIS FUNCTION
+
             form = IcdForm(request.POST, instance=this_icd)
 
             #is it valid?
@@ -371,7 +373,10 @@ def edit_icd(request, id=None, template_name='web/edit_icd.html'):
     else:   #no id in request
         return redirect('icd_index')
 
+def initiate_signature(request):
 
+
+def create_signature(request):
 
 
 

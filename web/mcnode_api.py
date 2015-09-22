@@ -14,3 +14,6 @@ def permissions_check(user_email,mcaction_id):
         return True
     else:
         return False
+
+def create_signature(user_email,mcaction_id):
+    r = requests.get(mcnode_url + "create_signature?format=json&user_email=" + user_email + "&mcaction_id=" + mcaction_id,verify=False)
