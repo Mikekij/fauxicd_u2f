@@ -85,6 +85,13 @@ except ImportError:
 
 def test_handler(id):
     message = "Test handler for dev environment"
-    config()
-    fire_the_spark(0.5)
+    try:
+        config()
+        fire_the_spark(float(duration)/float(1000))
+        message = "Spark fire worked."
+    except Exception, e:
+        print "error: " + str(e)
+        #logger.error('Failed to fire: '+ str(e))
+        message = "ICD not connected. Duration = " + str(duration)
+
     return message
