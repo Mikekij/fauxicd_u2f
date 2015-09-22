@@ -21,9 +21,12 @@ from u2flib_server import u2f_v2 as u2f
 
 #app homepage
 def index(request):
-    icd_list = Icd.objects.all() #set the list of ICDs. Should return only one for demo
-    context_dict = {'icd_list': icd_list}
+    if request.user.is_authenticated():
+        icd_list = Icd.objects.all() #set the list of ICDs. Should return only one for demo
+    else:
+        icd_list = {}
 
+    context_dict = {'icd_list': icd_list}
     return render(request, 'web/index.html',context_dict)
 
 
@@ -147,7 +150,8 @@ def create_tfa_registration(request):
 
         print "pass path"
         context_dict = {'result': str(result[0]), 'response': response}
-        return render(request, 'web/create_tfa_registration.html',context_dict)
+        messages.add_message(request, messages.INFO, 'Successfully registered a U2F device.')
+        return HttpResponseRedirect("/")
     else:
         #fail
         context_dict = {'result': str(result[0]), 'response': response}
@@ -173,19 +177,23 @@ def new_tfa_authentication(request):
     APP_ID = 'https://dev.medcrypt.com:8000'
 
     #APP_ID = 'https://' + request.get_host()
-    tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
-    start_data = {}
-    start_data['keyHandle'] = str(tfa_registration.key_handle)
-    start_data['appId'] = APP_ID
+    try:
+        tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
 
-    sign_request = u2f.start_authenticate(start_data)
+        start_data = {}
+        start_data['keyHandle'] = str(tfa_registration.key_handle)
+        start_data['appId'] = APP_ID
 
-    new_tfa_authentication_form = NewTfaAuthenticationForm(request.POST)
+        sign_request = u2f.start_authenticate(start_data)
 
-    context_dict = {'sign_request': sign_request, 'new_tfa_authentication_form': new_tfa_authentication_form}
+        new_tfa_authentication_form = NewTfaAuthenticationForm(request.POST)
 
-    return render(request, 'web/new_tfa_authentication.html',context_dict)
+        context_dict = {'sign_request': sign_request, 'new_tfa_authentication_form': new_tfa_authentication_form}
 
+        return render(request, 'web/new_tfa_authentication.html',context_dict)
+
+    except: #user hasn't registered a U2F Device
+        return HttpResponseRedirect("/web/new_tfa_registration")
 
 def create_tfa_authentication(request):
     current_user = request.user
