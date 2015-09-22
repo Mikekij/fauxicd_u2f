@@ -75,3 +75,11 @@ body {
   float:left;
   margin:10px;
 }
+
+.info {
+  background-color:#4FA8C7;
+  padding:10px;
+  float:left;
+  margin:10px;
+  color:white;
+}

@@ -25,6 +25,11 @@ class NewTfaAuthenticationForm(forms.ModelForm):
         model = TfaRegistration
         fields = ()
 
+class NewSignatureForm(forms.ModelForm):
+    class Meta:
+        model = None
+        fields = ()
+
 class IcdForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="ICD Name:")
     zap_duration = forms.IntegerField(help_text="Milliseconds to Execute Shock:")

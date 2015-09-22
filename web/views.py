@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.template import RequestContext
 from json import dumps, loads
 from web.models import *
-from web.forms import IcdForm,UserForm,UserProfileForm, NewTfaRegistrationForm, NewTfaAuthenticationForm
+from web.forms import IcdForm,UserForm,UserProfileForm, NewTfaRegistrationForm, NewTfaAuthenticationForm, NewSignatureForm
 from web.hardware_control import *
 from web.mcnode_api import *
 from django.contrib import messages
@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 import os
 import requests
+from ast import literal_eval
 
 from u2flib_server import u2f_v2 as u2f
 
@@ -350,11 +351,16 @@ def edit_icd(request, id=None, template_name='web/edit_icd.html'):
 
             #is it valid?
             if form.is_valid():
-                #save it
-                form.save(commit=True)
+                ##save it
+                #form.save(commit=True)
 
-                #redirect to index
-                return redirect(this_icd.get_absolute_url())
+                ##redirect to index
+                #return redirect(this_icd.get_absolute_url())
+                request.session['old_post'] = request.POST
+                request.session['icd_id'] = id
+
+                return redirect('initiate_signature')
+
             else:
                 print form.errors
         else: #if this is a GET
@@ -374,9 +380,82 @@ def edit_icd(request, id=None, template_name='web/edit_icd.html'):
         return redirect('icd_index')
 
 def initiate_signature(request):
+    old_post = request.session.get('old_post')
+    icd_id = request.session.get('icd_id')
+
+    request.session['old_post'] = old_post
+    request.session['icd_id'] = icd_id
+
+    print "old post: " + str(old_post)
+    print "icd_id: " + str(icd_id)
+
+    current_user = request.user
+
+    APP_ID = 'https://dev.medcrypt.com:8000'
+
+    tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
+    start_data = {}
+    start_data['keyHandle'] = str(tfa_registration.key_handle)
+    start_data['appId'] = APP_ID
+
+    sign_request = u2f.start_authenticate(start_data)
+
+    new_tfa_authentication_form = NewTfaAuthenticationForm(request.POST)
+
+    context_dict = {'sign_request': sign_request, 'new_tfa_authentication_form': new_tfa_authentication_form, 'old_post': dumps(old_post), 'icd_id': icd_id}
+
+    return render(request,'web/initiate_signature.html', context_dict)
 
 
 def create_signature(request):
+    current_user = request.user
+    response = request.POST["response"]
+    original_request = request.POST["original_request"]
+
+    old_post = literal_eval(request.POST["old_post"])
+    icd_id = request.POST["icd_id"]
+    print "old post: " + dumps(old_post)
+    print "icd_id: " + icd_id
+
+    request.session['old_post'] = old_post
+    request.session['icd_id'] = icd_id
+
+    print "Request data: " + original_request
+    print "Response data: " + response
+
+    APP_ID = 'https://dev.medcrypt.com:8000'
+
+    #APP_ID = 'https://' + request.get_host()
+    tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
+    start_data = {}
+    start_data['keyHandle'] = str(tfa_registration.key_handle)
+    start_data['appId'] = APP_ID
+    start_data['publicKey'] = str(tfa_registration.public_key)
+
+
+    result = u2f.verify_authenticate(start_data, original_request, response)
+    print "result: " + str(result[0])
+
+    if result:
+        print "pass path"
+        r = post_signature_message(current_user.email,"4") #post this to MCNode
+        print "Logged to Medcrypt: " + str(r.content)
+
+        this_icd = Icd.objects.get(id=icd_id)
+        form = IcdForm(old_post, instance=this_icd)
+
+        form.save(commit=True)
+
+        context_dict = {'result': str(result), 'response': response}
+        messages.add_message(request, messages.INFO, 'U2F Authentication Successful. ICD Settings Updated.')
+        return redirect(this_icd.get_absolute_url())
+        #return render(request, 'web/create_tfa_registration.html',context_dict)
+    else:
+        #fail
+        print "fail path"
+        messages.add_message(request, messages.WARNING, 'U2F Authentication Failed')
+        context_dict = {'result': str(result), 'response': response}
+        return render(request, 'icd_index',context_dict)
 
 
 

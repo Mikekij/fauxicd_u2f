@@ -20,6 +20,8 @@ $(document).ready(function(){
 });
 
 var signRequests = {{ sign_request|safe }};
+var old_post = {{ old_post|safe }};
+var icd_id = {{ icd_id|safe }};
 
 window.u2f.sign([signRequests], function(signResponse) {
   var form, reg;
@@ -31,6 +33,10 @@ window.u2f.sign([signRequests], function(signResponse) {
   response.value = JSON.stringify(signResponse);
   original_request = document.querySelector('[name=original_request]');
   original_request.value = JSON.stringify(signRequests);
+  response = document.querySelector('[name=old_post]');
+  response.value = JSON.stringify(old_post);
+  response = document.querySelector('[name=icd_id]');
+  response.value = JSON.stringify(icd_id);
 
   form.submit();
 }, 15);
@@ -58,6 +64,8 @@ window.u2f.sign([signRequests], function(signResponse) {
   {% csrf_token %}
     <input type="hidden" name="response">
     <input type="hidden" name="original_request">
+    <input type="hidden" name="old_post">
+    <input type="hidden" name="icd_id">
 
 </form>
 
