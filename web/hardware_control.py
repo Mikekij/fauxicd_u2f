@@ -83,7 +83,7 @@ try:
 except ImportError:
     rpi = False
 
-def test_handler(id):
+def test_handler(duration):
     message = "Test handler for dev environment"
     try:
         config()

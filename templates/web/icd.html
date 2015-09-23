@@ -17,8 +17,7 @@
       {% endif %}
 
       <div>
-        <a href="{% url 'edit_icd' id=icd.id %}" >Edit</a> | <a href="{% url 'icd_index' %}" >List All ICDs</a> |
-        <a href="#" id="check_perms">Check Permissions</a> | <a href="#" id="fido_request">Fido Request</a>
+        <a href="{% url 'edit_icd' id=icd.id %}" >Edit</a> | <a href="{% url 'icd_index' %}" >List All ICDs</a> 
       </div>
     </div><!-- /.col-md-6 -->
 
@@ -31,28 +30,12 @@
 
   <script>
   $("#shock-button").click(function(){
-    $.get("{% url 'deliver_shock_ajax' %}", function(data){
+    $.get("{% url 'deliver_shock_ajax' %}?duration={{ icd.zap_duration }}", function(data){
       results = JSON.parse(data);
       alert(results.message);
     });
   });
 
-  $( "#check_perms" ).click(function() {
-    url = "http://localhost:3000/permissions_check?format=json";
-    user_id = "&user_id=1";
-    mcaction_id = "&mcaction_id=5"
-    $.getJSON(url + user_id + mcaction_id,function(data) {
-      alert("User has permission:" + data);
-    });
-  });
-
-  $( "#fido_request" ).click(function() {
-    url = "http://localhost:3000/new_registration?format=json";
-
-    $.getJSON(url,function(data) {
-      alert(data);
-    });
-  });
 
   </script>
 

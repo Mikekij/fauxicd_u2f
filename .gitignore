@@ -7,6 +7,5 @@
 # Ignore bundler config.
 
 # Ignore the default SQLite database.
-*.sqlite3
-*.sqlite3-journal
-
+/*.sqlite3
+/*.sqlite3-journal

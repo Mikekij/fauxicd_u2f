@@ -15,6 +15,8 @@ import os
 import requests
 from ast import literal_eval
 
+from web.local_vars import *
+
 from u2flib_server import u2f_v2 as u2f
 
 
@@ -117,7 +119,9 @@ def new_tfa_registration(request):
     #key_handles = TfaRegistration.all.map(&:key_handle)
     #sign_requests = u2f.authentication_requests(key_handles)
 
-    APP_ID = 'https://dev.medcrypt.com:8000'
+    APP_ID = get_app_id()
+
+    #APP_ID = 'https://dev.medcrypt.com:8000'
     #APP_ID = 'https://' + request.get_host()
 
     registrationRequest = u2f.start_register(APP_ID)
@@ -174,7 +178,9 @@ def new_tfa_authentication(request):
     #key_handles = TfaRegistration.all.map(&:key_handle)
     #sign_requests = u2f.authentication_requests(key_handles)
 
-    APP_ID = 'https://dev.medcrypt.com:8000'
+    APP_ID = get_app_id()
+
+    #APP_ID = 'https://dev.medcrypt.com:8000'
 
     #APP_ID = 'https://' + request.get_host()
     try:
@@ -203,7 +209,9 @@ def create_tfa_authentication(request):
     print "Request data: " + original_request
     print "Response data: " + response
 
-    APP_ID = 'https://dev.medcrypt.com:8000'
+    APP_ID = get_app_id()
+
+    #APP_ID = 'https://dev.medcrypt.com:8000'
 
     #APP_ID = 'https://' + request.get_host()
     tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
@@ -399,7 +407,9 @@ def initiate_signature(request):
 
     current_user = request.user
 
-    APP_ID = 'https://dev.medcrypt.com:8000'
+    APP_ID = get_app_id()
+
+    #APP_ID = 'https://dev.medcrypt.com:8000'
 
     tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
     start_data = {}
@@ -431,7 +441,9 @@ def create_signature(request):
     print "Request data: " + original_request
     print "Response data: " + response
 
-    APP_ID = 'https://dev.medcrypt.com:8000'
+    APP_ID = get_app_id()
+
+    #APP_ID = 'https://dev.medcrypt.com:8000'
 
     #APP_ID = 'https://' + request.get_host()
     tfa_registration = TfaRegistration.objects.get(user_id = current_user.id)
