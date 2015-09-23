@@ -329,6 +329,7 @@ def show_icd(request, id=None):
         return render(request, 'web/icd.html', context_dict)
     else:
         print "Insufficient Permissions for this action."
+        messages.add_message(request, messages.WARNING, 'Insufficient Permissions for this action.')
         return redirect('index')
 
 
