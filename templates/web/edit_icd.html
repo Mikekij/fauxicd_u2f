@@ -4,7 +4,9 @@
 
 {% block body_block %}
 
-<h1>Edit ICD</h1>
+<div class=row>
+  <h1>Edit ICD</h1>
+</div>
 
 <form id="icd_form" method="post" action="/web/edit_icd/{{ this_icd.id }}/">
     {% csrf_token %}
@@ -14,11 +16,15 @@
 
     {% for field in form.visible_fields %}
         {{ field.errors }}
-        {{ field.help_text }}
-        {{ field }} <br />
+        <div class=row>
+          <div class="field-label">{{ field.help_text }}</div>
+          <div class="field-value">{{ field }} <br /></div>
+        </div>
     {% endfor %}
 
-    <input type="submit" name="submit" value="Update ICD" />
+    <div class=row>
+      <input type="submit" name="submit" value="Update ICD" />
+    </div>
 </form>
 
 

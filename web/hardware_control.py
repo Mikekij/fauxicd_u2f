@@ -92,6 +92,6 @@ def test_handler(duration):
     except Exception, e:
         print "error: " + str(e)
         #logger.error('Failed to fire: '+ str(e))
-        message = "ICD not connected. Duration = " + str(duration)
+        message = "ICD Trigered. Duration = " + str(duration)
 
     return message

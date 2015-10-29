@@ -5,7 +5,7 @@
 {% block body_block %}
 <div class=row>
   <div class="col-md-12 header-div">
-    <h1>Medcrypt FauxICD Interface</h1>
+    <h1>Medcrypt-Enabled AverageICD Interface</h1>
   </div>
 </div><!-- /.row -->
 
@@ -13,8 +13,7 @@
   {% for icd in icd_list %}
     <div class="icd_square_div">
       <h3 style="text-align:center;"><a href="{% url 'show_icd' id=icd.id %}">{{ icd.name }}</a></h3>
-      <p><b>Zap Duration:</b> {{ icd.zap_duration }}</p>
-      <p><b>Keys Required:</b> {{ icd.keys_required }}</p>
+      <p><b>Shock Duration:</b> {{ icd.zap_duration }}</p>
     </div>
 
   {% endfor %}

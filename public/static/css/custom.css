@@ -1,15 +1,24 @@
 body {
-  background-color: #F4FDFD;
+  background-color: #0D6D6C;
+  color:#F3FAFA;
+  font-family: "Times New Roman", Times, serif;
 }
 
+input {
+    color:#838687;
+}
 
 .errorlist {
   color:#C92F30;
 }
 
+a, a:hover {
+  color:#F3FAFA;
+}
+
 .navbar-default {
-  border-color: #E7E7E7;
-  background-color: #4FA8C7;
+  border-color: #B3B3B3;
+  background-color: #B3B3B3;
   color: #FDFDFD;
 
 }
@@ -62,8 +71,8 @@ body {
   height:200px;
   border: 2px solid;
   border-radius: 25px;
-  border-color: #E4EFEF;
-  background-color: #E4EFEF;
+  border-color: ##B3B3B3;
+  background-color: #B3B3B3;
   float:left;
   margin:5px;
   padding:10px;
@@ -77,9 +86,33 @@ body {
 }
 
 .info {
-  background-color:#4FA8C7;
+  background-color:#3B3D3D;
   padding:10px;
   float:left;
   margin:10px;
   color:white;
+}
+
+.modal {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  color:#838687;
+}
+
+.modal-footer {
+  color:#9FC8B6;
+}
+
+.centered {
+  text-align: center;
+}
+
+.field-label {
+  float:left;
+  width:400px;
+}
+
+.field-value {
+  float:left;
+  width:auto;
 }
