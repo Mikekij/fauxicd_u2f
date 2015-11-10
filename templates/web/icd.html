@@ -3,7 +3,7 @@
 {% block title %}FauxICD{% endblock %}
 
 {% block body_block %}
-
+{% load staticfiles %}
 
 
 
@@ -28,11 +28,24 @@
     </div><!-- /.col-md-6 -->
   </div><!--/row-->
 
+  <div class=row>
+    <div class="col-md-12">
+      <video id="icd_video" src="{% static "images/icd_short.mp4" %}" type="video/mp4" width="320" height="240" preload>
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div><!-- /.row -->
+
+
   <script>
   $("#shock-button").click(function(){
     $.get("{% url 'deliver_shock_ajax' %}?duration={{ icd.zap_duration }}", function(data){
       results = JSON.parse(data);
-      alert(results.message);
+      if(results.message == "confirmed"){
+        //alert("worked");
+        $("#icd_video")[0].play();
+      }
+      //alert(results.message);
     });
   });
 

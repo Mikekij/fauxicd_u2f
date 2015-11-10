@@ -489,7 +489,7 @@ def deliver_shock_ajax(request):
     if request.user.is_authenticated():
         duration = request.GET.get('duration')
         print "duration: " + duration
-        message = test_handler(duration)
+        message = "confirmed"
     else:
         message = "Gotta log in, dude."
 
